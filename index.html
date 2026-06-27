@@ -897,62 +897,176 @@ function getDpResponse(msg){
 }
 
 // ============================================================
-// HER CHAT (user mode)
+// ✅ HER CHAT — Load history + listen for new messages
 // ============================================================
-var dpChatOpen=false;
+var dpChatOpen = false;
+var dpChatLastTs = 0; // track last loaded message
 
 function toggleDpChat(){
-    if(MODE!=="user")return;
-    dpChatOpen=!dpChatOpen;
-    document.getElementById("dpChatWindow").classList.toggle("open",dpChatOpen);
-    if(dpChatOpen){setCatState("happy");document.getElementById("dpChatInput").focus();}
+    if(MODE !== "user") return;
+    dpChatOpen = !dpChatOpen;
+    document.getElementById("dpChatWindow").classList.toggle("open", dpChatOpen);
+    if(dpChatOpen){
+        setCatState("happy");
+        document.getElementById("dpChatInput").focus();
+    }
 }
 
-function addDpMsg(text,type){
-    var container=document.getElementById("dpChatMessages");
-    var div=document.createElement("div"); div.className="dp-msg "+type;
-    if(type==="bot") div.innerHTML='<span class="msg-name">Deadpool 🐱</span>'+escapeHTML(text);
-    else div.textContent=text;
-    container.appendChild(div); container.scrollTop=container.scrollHeight;
+function addDpMsg(text, type, skipFirebase) {
+    var container = document.getElementById("dpChatMessages");
+
+    // Remove "no messages" placeholder if exists
+    var empty = container.querySelector(".dp-msg.system");
+    if (empty && empty.textContent.includes("Deadpool kitta pesalaam")) {
+        empty.remove();
+    }
+
+    var div = document.createElement("div");
+    div.className = "dp-msg " + type;
+    if (type === "bot") {
+        div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(text);
+    } else {
+        div.textContent = text;
+    }
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
 }
 
-function saveChatFirebase(who,text){
-    if(!db)return;
-    db.ref("dpChat").push({who:who,text:text,time:new Date().toLocaleString("en-IN",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}),ts:Date.now()});
+function saveChatFirebase(who, text) {
+    if (!db) return;
+    db.ref("dpChat").push({
+        who:  who,
+        text: text,
+        time: new Date().toLocaleString("en-IN",{
+            hour:"2-digit", minute:"2-digit",
+            day:"numeric", month:"short"
+        }),
+        ts: Date.now()
+    });
+}
+
+// ✅ Load last 7 days of chat history for HER
+function loadUserChatHistory() {
+    if (MODE !== "user" || !db) return;
+
+    var sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+
+    db.ref("dpChat")
+        .orderByChild("ts")
+        .startAt(sevenDaysAgo)
+        .limitToLast(50)
+        .once("value", function(snap) {
+            var msgs = [];
+            snap.forEach(function(c){ msgs.push(c.val()); });
+
+            if (!msgs.length) return;
+
+            var container = document.getElementById("dpChatMessages");
+            // Clear default message
+            container.innerHTML = "";
+
+            msgs.forEach(function(m) {
+                var div = document.createElement("div");
+                div.className = "dp-msg " + m.who;
+                if (m.who === "bot") {
+                    div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(m.text);
+                } else {
+                    div.textContent = m.text;
+                }
+                container.appendChild(div);
+
+                // Track last message ts
+                if (m.ts > dpChatLastTs) dpChatLastTs = m.ts;
+            });
+
+            container.scrollTop = container.scrollHeight;
+        });
+
+    // ✅ Listen for NEW messages (your replies from viewer)
+    db.ref("dpChat")
+        .orderByChild("ts")
+        .startAt(Date.now())
+        .on("child_added", function(snap) {
+            var m = snap.val();
+            if (!m) return;
+
+            // Only show new messages after initial load
+            if (m.ts <= dpChatLastTs) return;
+            dpChatLastTs = m.ts;
+
+            // Only show bot messages (your replies)
+            // User messages are already added locally
+            if (m.who === "bot") {
+                var container = document.getElementById("dpChatMessages");
+                var div = document.createElement("div");
+                div.className = "dp-msg bot";
+                div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(m.text);
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+
+                // Show bubble too
+                showCatBubble(m.text);
+            }
+        });
 }
 
 function sendDpMessage(){
-    if(MODE!=="user")return;
-    var input=document.getElementById("dpChatInput");
-    var msg=input.value.trim(); if(!msg)return;
-    input.value=""; catLastAct=Date.now();
-    addDpMsg(msg,"user"); saveChatFirebase("user",msg);
-    var typing=document.getElementById("dpTyping"); typing.classList.add("show");
+    if(MODE !== "user") return;
+    var input = document.getElementById("dpChatInput");
+    var msg   = input.value.trim();
+    if (!msg) return;
+    input.value = "";
+    catLastAct = Date.now();
 
-    if(window.location.protocol==="https:"){
-        var tMsg="💬 Bold Auntyyyy says to Deadpool:\n\""+msg+"\"\n⏰ "+new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
-        fetch("https://api.telegram.org/bot"+TELEGRAM_TOKEN+"/sendMessage",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:tMsg})})
-        .then(function(r){return r.json();})
+    // Add to her chat UI immediately
+    addDpMsg(msg, "user");
+
+    // Save to Firebase
+    saveChatFirebase("user", msg);
+    dpChatLastTs = Date.now(); // update so we don't re-show
+
+    var typing = document.getElementById("dpTyping");
+    typing.classList.add("show");
+
+    // Try Telegram
+    if (window.location.protocol === "https:") {
+        var tMsg = "💬 Bold Auntyyyy says to Deadpool:\n\"" + msg + "\"\n⏰ " +
+            new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+
+        fetch("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage", {
+            method:  "POST",
+            headers: { "Content-Type": "application/json" },
+            body:    JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: tMsg })
+        })
+        .then(function(r){ return r.json(); })
         .then(function(d){
-            if(d.ok){
+            if (d.ok) {
                 typing.classList.remove("show");
-                var c=document.getElementById("dpChatMessages");
-                var div=document.createElement("div");div.className="dp-msg system";
-                div.textContent="📱 Message sent! Reply-ku wait pannu di... 💜";
-                c.appendChild(div);c.scrollTop=c.scrollHeight;
-            } else { usePreset(msg); }
-        }).catch(function(){usePreset(msg);});
+                var c   = document.getElementById("dpChatMessages");
+                var div = document.createElement("div");
+                div.className   = "dp-msg system";
+                div.textContent = "📱 Message sent! Reply-ku wait pannu di... 💜";
+                c.appendChild(div);
+                c.scrollTop = c.scrollHeight;
+            } else {
+                usePreset(msg);
+            }
+        })
+        .catch(function(){ usePreset(msg); });
     } else {
-        setTimeout(function(){usePreset(msg);},1200+Math.random()*800);
+        // file:// always preset
+        setTimeout(function(){ usePreset(msg); }, 1200 + Math.random() * 800);
     }
 }
 
 function usePreset(msg){
-    setTimeout(function(){
+    setTimeout(function() {
         document.getElementById("dpTyping").classList.remove("show");
-        var reply=getDpResponse(msg);
-        addDpMsg(reply,"bot"); saveChatFirebase("bot",reply); showCatBubble(reply);
-    },1200+Math.random()*800);
+        var reply = getDpResponse(msg);
+        addDpMsg(reply, "bot");
+        saveChatFirebase("bot", reply);
+        showCatBubble(reply);
+    }, 1200 + Math.random() * 800);
 }
 
 // ============================================================
@@ -982,13 +1096,12 @@ function toggleViewerChat() {
 function sendViewerReply() {
     var input = document.getElementById("viewerChatInput");
     var msg   = input.value.trim();
-    if (!msg) { showToast("⚠️ Type a message first!","error"); return; }
-    if (!db)  { showToast("❌ Not connected to Firebase","error"); return; }
+    if (!msg) { showToast("⚠️ Type a message first!", "error"); return; }
+    if (!db)  { showToast("❌ Not connected!", "error"); return; }
 
     input.value = "";
 
-    // Save to Firebase — appears in HER chat as Deadpool reply
-    db.ref("dpChat").push({
+    var entry = {
         who:  "bot",
         text: msg,
         time: new Date().toLocaleString("en-IN",{
@@ -996,9 +1109,33 @@ function sendViewerReply() {
             day:"numeric", month:"short"
         }),
         ts: Date.now()
-    });
+    };
 
-    showToast("💜 Sent to her chat!","success");
+    // ✅ Save to Firebase — her chat listens and shows it automatically
+    db.ref("dpChat").push(entry);
+
+    showToast("💜 Sent! She will see it in her chat!", "success");
+
+    // Add to viewer chat window too
+    var container = document.getElementById("viewerChatMessages");
+    var div = document.createElement("div");
+    div.className = "dp-msg bot";
+    div.innerHTML = '<span class="msg-name">You (as Deadpool 🐱)</span>' + escapeHTML(msg);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+// ✅ Clean up messages older than 7 days
+function cleanOldChatMessages() {
+    if (!db || MODE !== "user") return;
+    var sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    db.ref("dpChat")
+        .orderByChild("ts")
+        .endAt(sevenDaysAgo)
+        .once("value", function(snap) {
+            snap.forEach(function(child) {
+                child.ref.remove();
+            });
+        });
 }
 
 // ============================================================
@@ -1302,6 +1439,13 @@ function initFirebase(){
         });
     }catch(e){console.error(e);setSyncStatus("❌ Offline mode","#ff6b6b","rgba(255,107,107,0.1)","rgba(255,107,107,0.3)");if(MODE==="user")scheduleMoodModal();}
 }
+if (MODE === "user") {
+    // Load chat history after Firebase is ready
+    setTimeout(function() {
+        loadUserChatHistory();
+    }, 2000);
+}
+
 
 function startLiveListeners(){
     if(!db)return;
@@ -1421,6 +1565,10 @@ if (MODE === "user") {
         var slider=document.getElementById("themeSlider");
         if(slider){slider.value=val;previewTime(val);}
     }, 300);
+}
+// Clean old messages once a day
+if (MODE === "user") {
+    setTimeout(cleanOldChatMessages, 5000);
 }
 
 setInterval(changeQuote, 30000);
