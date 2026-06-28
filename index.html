@@ -58,17 +58,23 @@
         .bg-emoji { position: fixed; opacity: 0.08; animation: floatUp linear infinite; pointer-events: none; z-index: 0; filter: drop-shadow(0 0 6px rgba(167,139,250,0.4)); }
         @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; } 10% { opacity: 0.1; } 90% { opacity: 0.08; } 100% { transform: translateY(-120px) rotate(360deg) scale(0.8); opacity: 0; } }
 
-        
+        /* ===== THEME TESTER ===== */
+        .theme-tester { position: fixed; top: 16px; left: 16px; background: rgba(10,8,30,0.92); backdrop-filter: blur(16px); border: 1px solid rgba(167,139,250,0.3); border-radius: 16px; padding: 14px 16px; z-index: 9990; color: white; font-size: 0.76rem; width: 220px; }
+        .theme-tester h5 { font-size: 0.78rem; color: #a78bfa; font-weight: 700; margin-bottom: 10px; }
+        .theme-tester label { display: flex; justify-content: space-between; margin-bottom: 6px; color: rgba(255,255,255,0.7); }
+        .theme-tester input[type="range"] { width: 100%; margin-top: 4px; accent-color: #a78bfa; cursor: none; }
+        .theme-preview { width: 100%; height: 28px; border-radius: 8px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .theme-time-label { text-align: center; margin-top: 5px; color: #a78bfa; font-weight: 700; font-size: 0.7rem; }
+        .btn-theme-reset { width: 100%; margin-top: 8px; padding: 6px; background: rgba(167,139,250,0.2); border: 1px solid rgba(167,139,250,0.3); border-radius: 8px; color: white; cursor: none; font-size: 0.7rem; font-weight: 600; }
+
         /* ===== SIDE GAMES ===== */
         .side-game { position: fixed; top: 50%; transform: translateY(-50%); width: 200px; z-index: 5; }
         .side-game.left  { left: 8px; }
         .side-game.right { right: 8px; }
-
         .side-game-box { background: rgba(15,12,41,0.85); backdrop-filter: blur(20px); border: 1px solid rgba(167,139,250,0.25); border-radius: 20px; padding: 12px; color: white; text-align: center; box-shadow: 0 8px 32px rgba(102,126,234,0.2); position: relative; overflow: hidden; }
         .side-game-box::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, #a78bfa, transparent); animation: scanLine 3s linear infinite; }
         @keyframes scanLine { 0% { left: -100%; } 100% { left: 200%; } }
         .side-game-box h4 { font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; background: linear-gradient(90deg, #a78bfa, #f9a8d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
         .game-tabs { display: flex; gap: 6px; margin-bottom: 10px; background: rgba(15,12,41,0.5); border-radius: 12px; padding: 4px; border: 1px solid rgba(167,139,250,0.15); }
         .game-tab { flex: 1; padding: 7px 4px; border: none; border-radius: 8px; background: transparent; color: rgba(255,255,255,0.5); font-size: 0.78rem; cursor: none; transition: all 0.3s; font-weight: 600; }
         .game-tab.active { background: linear-gradient(135deg, rgba(102,126,234,0.5), rgba(118,75,162,0.5)); color: white; }
@@ -76,7 +82,6 @@
         .game-panel { animation: fadePanel 0.3s ease; }
         @keyframes fadePanel { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform: translateY(0); } }
         .btn-game-side { width: 100%; margin-top: 8px; background: linear-gradient(135deg, rgba(102,126,234,0.3), rgba(118,75,162,0.3)); color: white; border: 1px solid rgba(167,139,250,0.4); padding: 6px; border-radius: 10px; font-size: 0.78rem; cursor: none; font-weight: 700; transition: all 0.3s; }
-        .btn-game-side:hover { transform: scale(1.04); }
         .game-info-tiny { margin-top: 8px; background: rgba(15,12,41,0.4); border-radius: 10px; padding: 8px; font-size: 0.68rem; color: rgba(255,255,255,0.65); line-height: 1.5; text-align: left; border: 1px solid rgba(167,139,250,0.1); }
         .game-info-tiny b { color: #a78bfa; }
         .game-history { margin-top: 6px; background: rgba(15,12,41,0.5); border-radius: 8px; padding: 6px 8px; border: 1px solid rgba(167,139,250,0.1); }
@@ -115,11 +120,11 @@
         /* ===== CAT ===== */
         .dp-cat-container { position: fixed; bottom: 30px; right: 30px; z-index: 9990; user-select: none; }
 
-        .dp-bubble { position: absolute; bottom: 92px; right: 0; background: rgba(10,8,30,0.95); border: 1.5px solid rgba(167,139,250,0.35); border-radius: 16px 16px 4px 16px; padding: 10px 14px; min-width: 175px; max-width: 230px; color: white; font-size: 0.77rem; line-height: 1.5; backdrop-filter: blur(16px); box-shadow: 0 8px 24px rgba(102,126,234,0.25); display: none; animation: bubblePop 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 9991; }
+        .dp-bubble { position: absolute; bottom: 92px; right: 0; background: rgba(10,8,30,0.95); border: 1.5px solid rgba(167,139,250,0.4); border-radius: 16px 16px 4px 16px; padding: 10px 14px; min-width: 175px; max-width: 230px; color: white; font-size: 0.77rem; line-height: 1.5; backdrop-filter: blur(16px); box-shadow: 0 8px 24px rgba(102,126,234,0.25); display: none; animation: bubblePop 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 9991; }
         @keyframes bubblePop { from { transform: scale(0.5) translateY(10px); opacity:0; } to { transform: scale(1) translateY(0); opacity:1; } }
         .dp-bubble.show { display: block; }
         .dp-bubble-text { color: rgba(255,255,255,0.92); margin-bottom: 5px; }
-        .dp-bubble-name { font-size: 0.63rem; color: #f9c490; font-weight: 700; }
+        .dp-bubble-name { font-size: 0.63rem; color: #a78bfa; font-weight: 700; }
 
         .dp-cat-svg-wrap { width: 80px; height: 80px; cursor: none !important; position: relative; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.35)); transition: transform 0.3s ease; animation: catFloat 3s ease-in-out infinite; }
         .dp-cat-svg-wrap:hover { transform: scale(1.12) translateY(-4px); }
@@ -130,7 +135,6 @@
         @keyframes catHappy   { 0% { transform: translateY(0) rotate(-3deg); } 100% { transform: translateY(-8px) rotate(3deg); } }
         @keyframes catExcited { 0% { transform: rotate(-5deg) scale(1); } 100% { transform: rotate(5deg) scale(1.06); } }
         @keyframes catSleep   { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(3px) rotate(2deg); } }
-
         .dp-zzz { position: absolute; top: -14px; right: -4px; font-size: 0.72rem; color: #a78bfa; font-weight: 800; animation: floatZzz 2s ease-in-out infinite; display: none; }
         .dp-cat-svg-wrap.sleeping .dp-zzz { display: block; }
         @keyframes floatZzz { 0% { transform: translateY(0) scale(1); opacity:1; } 100% { transform: translateY(-18px) scale(1.4); opacity:0; } }
@@ -138,31 +142,63 @@
         .dp-cat-svg-wrap.loved .dp-hearts { display: block; }
         @keyframes floatHearts { 0% { transform: translateX(-50%) translateY(0); opacity:1; } 100% { transform: translateX(-50%) translateY(-22px); opacity:0; } }
 
-        /* ===== CHAT WINDOWS ===== */
-        .dp-chat-window { position: fixed; bottom: 120px; right: 30px; width: 300px; background: rgba(10,8,30,0.96); border: 1px solid rgba(244,164,96,0.25); border-radius: 20px; z-index: 9992; display: none; flex-direction: column; box-shadow: 0 20px 60px rgba(244,164,96,0.15); backdrop-filter: blur(20px); overflow: hidden; max-height: 420px; }
+        /* ===== ✅ CHAT WINDOW — Purple Theme ===== */
+        .dp-chat-window {
+            position: fixed; bottom: 120px; right: 30px; width: 300px;
+            background: rgba(10,8,30,0.96);
+            border: 1px solid rgba(167,139,250,0.35);
+            border-radius: 20px; z-index: 9992;
+            display: none; flex-direction: column;
+            box-shadow: 0 20px 60px rgba(90,77,138,0.35);
+            backdrop-filter: blur(20px); overflow: hidden; max-height: 420px;
+        }
         .dp-chat-window.open { display: flex; }
-        .dp-chat-header { background: linear-gradient(135deg, #d4885a, #c07040); padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
-        .dp-chat-avatar { width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+
+        .dp-chat-header {
+            background: linear-gradient(135deg, #5a4d8a, #3d2f6e);
+            padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid rgba(167,139,250,0.2);
+        }
+        .dp-chat-avatar {
+            width: 32px; height: 32px;
+            background: rgba(167,139,250,0.3);
+            border: 1px solid rgba(167,139,250,0.4);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
         .dp-chat-title { font-size: 0.85rem; font-weight: 700; color: white; }
         .dp-chat-subtitle { font-size: 0.65rem; color: rgba(255,255,255,0.7); }
         .dp-chat-close { margin-left: auto; background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1rem; cursor: none; }
+
         .dp-chat-messages { flex:1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; max-height: 280px; }
         .dp-chat-messages::-webkit-scrollbar { width: 4px; }
-        .dp-chat-messages::-webkit-scrollbar-thumb { background: #d4885a; border-radius: 4px; }
+        .dp-chat-messages::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 4px; }
+
         .dp-msg { max-width: 85%; padding: 8px 12px; border-radius: 14px; font-size: 0.78rem; line-height: 1.5; animation: msgSlide 0.3s ease; }
         @keyframes msgSlide { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
-        .dp-msg.user { background: linear-gradient(135deg, rgba(102,126,234,0.3), rgba(118,75,162,0.3)); border: 1px solid rgba(167,139,250,0.3); color: white; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
-        .dp-msg.bot { background: rgba(212,136,90,0.18); border: 1px solid rgba(244,164,96,0.25); color: white; align-self: flex-start; border-radius: 14px 14px 14px 4px; }
-        .dp-msg.bot .msg-name { font-size: 0.62rem; color: #f9c490; font-weight: 700; margin-bottom: 3px; display: block; }
+
+        .dp-msg.user {
+            background: linear-gradient(135deg, rgba(102,126,234,0.3), rgba(118,75,162,0.3));
+            border: 1px solid rgba(167,139,250,0.3); color: white;
+            align-self: flex-end; border-radius: 14px 14px 4px 14px;
+        }
+        .dp-msg.bot {
+            background: rgba(90,77,138,0.25);
+            border: 1px solid rgba(167,139,250,0.25);
+            color: white; align-self: flex-start; border-radius: 14px 14px 14px 4px;
+        }
+        .dp-msg.bot .msg-name { font-size: 0.62rem; color: #a78bfa; font-weight: 700; margin-bottom: 3px; display: block; }
         .dp-msg.system { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.45); font-size: 0.68rem; text-align: center; align-self: center; padding: 4px 10px; border-radius: 20px; }
-        .dp-chat-input-area { padding: 10px 12px; border-top: 1px solid rgba(244,164,96,0.12); display: flex; gap: 8px; }
-        .dp-chat-input { flex:1; background: rgba(255,255,255,0.06); border: 1px solid rgba(244,164,96,0.2); border-radius: 20px; padding: 8px 14px; color: white; font-size: 0.78rem; outline: none; font-family: inherit; }
+
+        .dp-chat-input-area { padding: 10px 12px; border-top: 1px solid rgba(167,139,250,0.15); display: flex; gap: 8px; }
+        .dp-chat-input { flex:1; background: rgba(255,255,255,0.06); border: 1px solid rgba(167,139,250,0.25); border-radius: 20px; padding: 8px 14px; color: white; font-size: 0.78rem; outline: none; font-family: inherit; }
         .dp-chat-input::placeholder { color: rgba(255,255,255,0.3); }
-        .dp-chat-input:focus { border-color: #f4a460; }
-        .dp-chat-send { width: 36px; height: 36px; background: linear-gradient(135deg, #d4885a, #c07040); border: none; border-radius: 50%; color: white; font-size: 0.85rem; cursor: none; display: flex; align-items: center; justify-content: center; }
-        .dp-typing { display: none; align-self: flex-start; background: rgba(212,136,90,0.18); border: 1px solid rgba(244,164,96,0.2); border-radius: 14px 14px 14px 4px; padding: 8px 14px; }
+        .dp-chat-input:focus { border-color: #a78bfa; box-shadow: 0 0 0 3px rgba(167,139,250,0.1); }
+        .dp-chat-send { width: 36px; height: 36px; background: linear-gradient(135deg, #7c3aed, #5a4d8a); border: none; border-radius: 50%; color: white; font-size: 0.85rem; cursor: none; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .dp-chat-send:hover { transform: scale(1.1); box-shadow: 0 4px 15px rgba(124,58,237,0.4); }
+
+        .dp-typing { display: none; align-self: flex-start; background: rgba(90,77,138,0.2); border: 1px solid rgba(167,139,250,0.2); border-radius: 14px 14px 14px 4px; padding: 8px 14px; }
         .dp-typing.show { display: flex; gap: 4px; align-items: center; }
-        .dp-typing span { width: 6px; height: 6px; background: #f4a460; border-radius: 50%; animation: typingBounce 1s infinite; }
+        .dp-typing span { width: 6px; height: 6px; background: #a78bfa; border-radius: 50%; animation: typingBounce 1s infinite; }
         .dp-typing span:nth-child(2) { animation-delay: 0.2s; }
         .dp-typing span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typingBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
@@ -178,11 +214,7 @@
             backdrop-filter: blur(20px); overflow: hidden; max-height: 460px;
         }
         .viewer-chat-window.open { display: flex; }
-        .viewer-chat-header {
-            background: linear-gradient(135deg, #5a4d8a, #3d2f6e);
-            padding: 12px 16px; display: flex; align-items: center; gap: 10px;
-            border-bottom: 1px solid rgba(90,77,138,0.3);
-        }
+        .viewer-chat-header { background: linear-gradient(135deg, #5a4d8a, #3d2f6e); padding: 12px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(167,139,250,0.2); }
         .viewer-chat-messages { flex:1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; max-height: 300px; }
         .viewer-chat-messages::-webkit-scrollbar { width: 4px; }
         .viewer-chat-messages::-webkit-scrollbar-thumb { background: #5a4d8a; border-radius: 4px; }
@@ -202,11 +234,7 @@
             box-shadow: 0 4px 20px rgba(90,77,138,0.4); transition: all 0.3s;
         }
         .viewer-chat-btn:hover { transform: scale(1.05); }
-        .chat-unread-badge {
-            background: #ff6b6b; border-radius: 50%;
-            width: 18px; height: 18px; font-size: 0.65rem;
-            display: none; align-items: center; justify-content: center; font-weight: 800;
-        }
+        .chat-unread-badge { background: #ff6b6b; border-radius: 50%; width: 18px; height: 18px; font-size: 0.65rem; display: none; align-items: center; justify-content: center; font-weight: 800; }
 
         /* ===== VIEWER CONTROLS ===== */
         .viewer-badge { position: fixed; top: 16px; right: 16px; background: linear-gradient(135deg,#ff6b6b,#ee5a24); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; z-index: 100; display: none; align-items: center; gap: 6px; box-shadow: 0 4px 20px rgba(238,90,36,0.5); animation: pulseBadge 2s infinite; }
@@ -229,21 +257,21 @@
         .activity-item .act-icon { font-size: 0.9rem; flex-shrink: 0; }
         .activity-item .act-text { flex:1; color: rgba(255,255,255,0.8); font-size: 0.72rem; line-height: 1.4; }
         .activity-item .act-time { color: rgba(255,255,255,0.35); font-size: 0.64rem; white-space: nowrap; }
-        .chat-log-toggle { position: fixed; top: 152px; right: 16px; background: rgba(212,136,90,0.3); backdrop-filter: blur(16px); border: 1px solid rgba(244,164,96,0.3); border-radius: 12px; padding: 7px 12px; color: white; font-size: 0.72rem; z-index: 100; display: none; align-items: center; gap: 6px; cursor: none; font-weight: 600; transition: all 0.3s; }
-        .chat-log-panel { position: fixed; top: 196px; right: 16px; background: rgba(10,8,30,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(212,136,90,0.3); border-radius: 16px; padding: 0; color: white; font-size: 0.75rem; z-index: 100; display: none; width: 280px; max-height: 400px; overflow: hidden; flex-direction: column; }
+        .chat-log-toggle { position: fixed; top: 152px; right: 16px; background: rgba(90,77,138,0.3); backdrop-filter: blur(16px); border: 1px solid rgba(167,139,250,0.3); border-radius: 12px; padding: 7px 12px; color: white; font-size: 0.72rem; z-index: 100; display: none; align-items: center; gap: 6px; cursor: none; font-weight: 600; transition: all 0.3s; }
+        .chat-log-panel { position: fixed; top: 196px; right: 16px; background: rgba(10,8,30,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(90,77,138,0.4); border-radius: 16px; padding: 0; color: white; font-size: 0.75rem; z-index: 100; display: none; width: 280px; max-height: 400px; overflow: hidden; flex-direction: column; }
         .chat-log-panel.open { display: flex; }
-        .chat-log-header { background: linear-gradient(135deg, #8b4513, #c07040); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+        .chat-log-header { background: linear-gradient(135deg, #5a4d8a, #3d2f6e); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
         .chat-log-header h5 { font-size: 0.82rem; font-weight: 700; color: white; }
         .chat-log-close { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 0.9rem; cursor: none; }
         .chat-log-body { flex:1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
         .chat-log-body::-webkit-scrollbar { width: 4px; }
-        .chat-log-body::-webkit-scrollbar-thumb { background: #d4885a; border-radius: 4px; }
+        .chat-log-body::-webkit-scrollbar-thumb { background: #5a4d8a; border-radius: 4px; }
         .cl-msg { padding: 8px 12px; border-radius: 10px; font-size: 0.74rem; line-height: 1.5; }
         .cl-msg.user { background: rgba(102,126,234,0.2); border: 1px solid rgba(167,139,250,0.2); color: white; }
-        .cl-msg.bot  { background: rgba(212,136,90,0.15); border: 1px solid rgba(244,164,96,0.2); color: white; }
+        .cl-msg.bot  { background: rgba(90,77,138,0.2); border: 1px solid rgba(167,139,250,0.2); color: white; }
         .cl-msg .cl-who { font-size: 0.62rem; font-weight: 700; margin-bottom: 3px; }
         .cl-msg.user .cl-who { color: #a78bfa; }
-        .cl-msg.bot  .cl-who { color: #f9c490; }
+        .cl-msg.bot  .cl-who { color: #c4b5fd; }
         .cl-msg .cl-time { font-size: 0.6rem; color: rgba(255,255,255,0.4); margin-top: 3px; }
         .cl-empty { text-align: center; padding: 20px; color: rgba(255,255,255,0.35); font-size: 0.78rem; }
 
@@ -455,7 +483,15 @@
 <div class="grid-overlay"></div>
 <div id="bgEmojis"></div>
 
-
+<!-- THEME TESTER — REMOVE BEFORE DEPLOY -->
+<div class="theme-tester" id="themeTester">
+    <h5>🎨 Theme Tester</h5>
+    <label>Time: <b id="themeTimeVal">12:00 PM</b></label>
+    <input type="range" id="themeSlider" min="0" max="2300" step="10" value="1200" oninput="previewTime(this.value)">
+    <div class="theme-preview" id="themePreview"></div>
+    <div class="theme-time-label" id="themeLabel">☀️ Noon</div>
+    <button class="btn-theme-reset" onclick="resetTheme()">🔄 Reset to Now</button>
+</div>
 
 <!-- VIEWER CONTROLS -->
 <div class="viewer-badge" id="viewerBadge"><div class="live-dot"></div>👀 VIEWER MODE</div>
@@ -471,7 +507,7 @@
     <div class="chat-log-body" id="chatLogBody"><div class="cl-empty">No chats yet 🐱</div></div>
 </div>
 
-<!-- ✅ VIEWER CHAT WINDOW — Live chat monitor + reply -->
+<!-- VIEWER CHAT WINDOW -->
 <div class="viewer-chat-window" id="viewerChatWindow">
     <div class="viewer-chat-header">
         <div class="dp-chat-avatar">💬</div>
@@ -482,7 +518,7 @@
         <button class="dp-chat-close" onclick="toggleViewerChat()">✕</button>
     </div>
     <div class="viewer-chat-messages" id="viewerChatMessages">
-        <div class="dp-msg system">Watching her chat 👀 You can reply below!</div>
+        <div class="dp-msg system">Watching her chat 👀 Reply below!</div>
     </div>
     <div class="viewer-chat-input-area">
         <input class="viewer-chat-input" id="viewerChatInput"
@@ -494,7 +530,7 @@
     </div>
 </div>
 
-<!-- ✅ VIEWER CHAT BUTTON -->
+<!-- VIEWER CHAT BUTTON -->
 <button class="viewer-chat-btn" id="viewerChatBtn" onclick="toggleViewerChat()">
     💬 Her Chat
     <span class="chat-unread-badge" id="chatUnreadBadge">0</span>
@@ -623,14 +659,19 @@
     </div>
 </div>
 
-<!-- HER CHAT WINDOW (user mode) -->
+<!-- ✅ HER CHAT WINDOW — Purple Theme matching viewer -->
 <div class="dp-chat-window" id="dpChatWindow">
     <div class="dp-chat-header">
         <div class="dp-chat-avatar">🐱</div>
-        <div><div class="dp-chat-title">Deadpool</div><div class="dp-chat-subtitle">Ungaluku help panna ready di! 💜</div></div>
+        <div>
+            <div class="dp-chat-title">Deadpool</div>
+            <div class="dp-chat-subtitle">Ungaluku help panna ready di! 💜</div>
+        </div>
         <button class="dp-chat-close" onclick="toggleDpChat()">✕</button>
     </div>
-    <div class="dp-chat-messages" id="dpChatMessages"><div class="dp-msg system">Deadpool kitta pesalaam! Type pannu di 🐱</div></div>
+    <div class="dp-chat-messages" id="dpChatMessages">
+        <div class="dp-msg system">Deadpool kitta pesalaam! Type pannu di 🐱</div>
+    </div>
     <div class="dp-typing" id="dpTyping"><span></span><span></span><span></span></div>
     <div class="dp-chat-input-area">
         <input class="dp-chat-input" id="dpChatInput" placeholder="Deadpool kitta sollu..." onkeydown="if(event.key==='Enter')sendDpMessage()"/>
@@ -760,50 +801,34 @@ var modalShownThisSession=false, activityOpen=false, chatLogOpen=false;
 function calcTheme(t) {
     var progress = Math.sin(((t - 3) / 24) * Math.PI * 2 - Math.PI / 2);
     var norm = (progress + 1) / 2;
-    return {
-        H: Math.round(248 - norm * 18),
-        S: Math.round(40  + norm * 25),
-        L: Math.round(5   + norm * 35)
-    };
+    return { H: Math.round(248-norm*18), S: Math.round(40+norm*25), L: Math.round(5+norm*35) };
 }
 
 function updateThemeNow() {
-    var now = new Date();
-    var t   = now.getHours() + now.getMinutes() / 60;
-    var c   = calcTheme(t);
+    var now=new Date(), t=now.getHours()+now.getMinutes()/60, c=calcTheme(t);
     document.body.style.background = "hsl("+c.H+","+c.S+"%,"+c.L+"%)";
 }
 
 function previewTime(val) {
-    var t      = parseInt(val) / 100;
-    var h      = Math.floor(t);
-    var m      = Math.round((t - h) * 60);
-    var ampm   = h < 12 ? "AM" : "PM";
-    var h12    = h === 0 ? 12 : h > 12 ? h - 12 : h;
-    var minStr = m < 10 ? "0" + m : "" + m;
-    document.getElementById("themeTimeVal").textContent = h12+":"+minStr+" "+ampm;
-    var c  = calcTheme(t);
-    var bg = "hsl("+c.H+","+c.S+"%,"+c.L+"%)";
-    document.body.style.background = bg;
-    document.getElementById("themePreview").style.background = bg;
+    var t=parseInt(val)/100, h=Math.floor(t), m=Math.round((t-h)*60);
+    var ampm=h<12?"AM":"PM", h12=h===0?12:h>12?h-12:h;
+    var minStr=m<10?"0"+m:""+m;
+    document.getElementById("themeTimeVal").textContent=h12+":"+minStr+" "+ampm;
+    var c=calcTheme(t), bg="hsl("+c.H+","+c.S+"%,"+c.L+"%)";
+    document.body.style.background=bg;
+    document.getElementById("themePreview").style.background=bg;
     var lbl;
-    if      (h < 4)  lbl = "🌑 Deep Night";
-    else if (h < 7)  lbl = "🌄 Dawn";
-    else if (h < 10) lbl = "☀️ Morning";
-    else if (h < 13) lbl = "🌟 Noon — Brightest!";
-    else if (h < 16) lbl = "🌤️ Afternoon";
-    else if (h < 18) lbl = "🌇 Sunset";
-    else if (h < 21) lbl = "🌆 Evening";
-    else             lbl = "🌙 Night";
-    document.getElementById("themeLabel").textContent = lbl + " (L:"+c.L+"%)";
+    if(h<4)lbl="🌑 Deep Night";else if(h<7)lbl="🌄 Dawn";else if(h<10)lbl="☀️ Morning";
+    else if(h<13)lbl="🌟 Noon — Brightest!";else if(h<16)lbl="🌤️ Afternoon";
+    else if(h<18)lbl="🌇 Sunset";else if(h<21)lbl="🌆 Evening";else lbl="🌙 Night";
+    document.getElementById("themeLabel").textContent=lbl+" (L:"+c.L+"%)";
 }
 
 function resetTheme() {
     updateThemeNow();
-    var now = new Date();
-    var val = Math.round((now.getHours() + now.getMinutes()/60) * 100);
-    var slider = document.getElementById("themeSlider");
-    if (slider) { slider.value = val; previewTime(val); }
+    var now=new Date(), val=Math.round((now.getHours()+now.getMinutes()/60)*100);
+    var slider=document.getElementById("themeSlider");
+    if(slider){slider.value=val;previewTime(val);}
 }
 
 updateThemeNow();
@@ -815,21 +840,20 @@ setInterval(updateThemeNow, 600000);
 var catState="idle", catBubTimer=null, catLastAct=Date.now();
 
 function setCatState(state) {
-    catState = state;
-    var wrap = document.getElementById("dpCat");
-    if (!wrap) return;
-    wrap.className = "dp-cat-svg-wrap " + state;
+    catState=state;
+    var wrap=document.getElementById("dpCat"); if(!wrap)return;
+    wrap.className="dp-cat-svg-wrap "+state;
     var lp=document.getElementById("leftPupil"),rp=document.getElementById("rightPupil"),mouth=document.getElementById("catMouth");
-    if (!lp) return;
-    if (state==="sleeping") { lp.setAttribute("ry","2"); rp.setAttribute("ry","2"); lp.setAttribute("fill","#c0846a"); rp.setAttribute("fill","#c0846a"); mouth.setAttribute("d","M 34 46 Q 40 49 46 46"); }
-    else if (state==="happy"||state==="excited") { lp.setAttribute("ry","5.5"); rp.setAttribute("ry","5.5"); lp.setAttribute("fill","url(#pupilGrad)"); rp.setAttribute("fill","url(#pupilGrad)"); mouth.setAttribute("d","M 32 44 Q 40 54 48 44"); }
-    else if (state==="sad") { lp.setAttribute("ry","5.5"); rp.setAttribute("ry","5.5"); lp.setAttribute("fill","url(#pupilGrad)"); rp.setAttribute("fill","url(#pupilGrad)"); mouth.setAttribute("d","M 34 50 Q 40 44 46 50"); }
-    else if (state==="loved") { lp.setAttribute("ry","5.5"); rp.setAttribute("ry","5.5"); lp.setAttribute("fill","#ff6eb4"); rp.setAttribute("fill","#ff6eb4"); mouth.setAttribute("d","M 32 44 Q 40 54 48 44"); }
-    else { lp.setAttribute("ry","5.5"); rp.setAttribute("ry","5.5"); lp.setAttribute("fill","url(#pupilGrad)"); rp.setAttribute("fill","url(#pupilGrad)"); mouth.setAttribute("d","M 34 46 Q 40 52 46 46"); }
+    if(!lp)return;
+    if(state==="sleeping"){lp.setAttribute("ry","2");rp.setAttribute("ry","2");lp.setAttribute("fill","#c0846a");rp.setAttribute("fill","#c0846a");mouth.setAttribute("d","M 34 46 Q 40 49 46 46");}
+    else if(state==="happy"||state==="excited"){lp.setAttribute("ry","5.5");rp.setAttribute("ry","5.5");lp.setAttribute("fill","url(#pupilGrad)");rp.setAttribute("fill","url(#pupilGrad)");mouth.setAttribute("d","M 32 44 Q 40 54 48 44");}
+    else if(state==="sad"){lp.setAttribute("ry","5.5");rp.setAttribute("ry","5.5");lp.setAttribute("fill","url(#pupilGrad)");rp.setAttribute("fill","url(#pupilGrad)");mouth.setAttribute("d","M 34 50 Q 40 44 46 50");}
+    else if(state==="loved"){lp.setAttribute("ry","5.5");rp.setAttribute("ry","5.5");lp.setAttribute("fill","#ff6eb4");rp.setAttribute("fill","#ff6eb4");mouth.setAttribute("d","M 32 44 Q 40 54 48 44");}
+    else{lp.setAttribute("ry","5.5");rp.setAttribute("ry","5.5");lp.setAttribute("fill","url(#pupilGrad)");rp.setAttribute("fill","url(#pupilGrad)");mouth.setAttribute("d","M 34 46 Q 40 52 46 46");}
 }
 
 function showCatBubble(msg) {
-    var b=document.getElementById("dpBubble"), t=document.getElementById("dpBubbleText");
+    var b=document.getElementById("dpBubble"),t=document.getElementById("dpBubbleText");
     if(!b||!t)return; t.textContent=msg; b.classList.add("show");
     clearTimeout(catBubTimer); catBubTimer=setTimeout(function(){b.classList.remove("show");},5500);
 }
@@ -858,7 +882,7 @@ function resetCatAct() {
 // RESPONSES
 // ============================================================
 var dpR = {
-    greetings:["Vanakkam di! Deadpool ready! 😸","Ayyo, nee vandha! Lonely-a irunthen! 💜","Hiii di! Enna vishayam sollu? 🐱","Oh ho! Welcome! 😻","Nee yeppa varu av nuu wait nannitee eruthaa! Finally vandha! 😸","Lonely ahh eruthaa😒 Finally vanthuta ella na, na unaku whatsup la message pannula nu eruthaa!"],
+    greetings:["Vanakkam di! Deadpool ready! 😸","Ayyo, nee vandha! Lonely-a irunthen! 💜","Hiii di! Enna vishayam sollu? 🐱","Oh ho! Welcome! 😻","Di di di! Finally vandha! 😸"],
     howAreYou:["Naan super di! 💜","Romba nalla irken! Nee epdi iruka di? 😸","I'm pawsome! Get it? Paw-some! 😂"],
     tired:["Tired-a? Coffee eduthutu Deadpool kitta vaa! ☕💜","Di... rest edutuko! ☕","Ayyo paavam! Tired-a? Poi Deadpool-oda coffee time! ☕"],
     stressed:["Stressed-a? Sollu enna problem! 💪","Stress-oda enemy — naan! 🐱","Stressed? Come, coffee break edukalam! ☕"],
@@ -873,7 +897,7 @@ var dpR = {
     love:["Aww di! Deadpool-ku love-a? 😻💜","Love you too di! More than tacos! 💜🌮"],
     morning:["Good morning di! Ready for an awesome day? ☀️","Morning-la Deadpool-kitta pesara? Great start! ☕😸"],
     night:["Di, late-a irukku! Rest eduthukkonga! 🌙","Night-a di? Deadpool will guard! 🌙💜"],
-    default:["Hmm interesting di! Deadpool listening... 🐱","Oh? Sollu sollu di! 👂","Ayyo interesting! 😸","Valid point di! 💯","Wow di! Deadpool learned something new! 🌟","Di, you're full of surprises! 💜","Enna solra... Deadpool processing... done! Interesting! 😸"]
+    default:["Hmm interesting di! Deadpool listening... 🐱","Oh? Sollu sollu di! 👂","Ayyo interesting! 😸","Valid point di! 💯","Wow di! Deadpool learned something new! 🌟","Di, you're full of surprises! Deadpool loves that! 💜","Enna solra... Deadpool processing... done! Interesting! 😸"]
 };
 
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
@@ -897,117 +921,97 @@ function getDpResponse(msg){
 }
 
 // ============================================================
-// ✅ HER CHAT — Load history + listen for new messages
+// ✅ HER CHAT — Purple theme + load history + real-time
 // ============================================================
-var dpChatOpen = false;
-var dpChatLastTs = 0; // track last loaded message
+var dpChatOpen=false;
+var dpChatLastTs=0;
 
 function toggleDpChat(){
-    if(MODE !== "user") return;
-    dpChatOpen = !dpChatOpen;
-    document.getElementById("dpChatWindow").classList.toggle("open", dpChatOpen);
-    if(dpChatOpen){
-        setCatState("happy");
-        document.getElementById("dpChatInput").focus();
-    }
+    if(MODE!=="user")return;
+    dpChatOpen=!dpChatOpen;
+    document.getElementById("dpChatWindow").classList.toggle("open",dpChatOpen);
+    if(dpChatOpen){setCatState("happy");document.getElementById("dpChatInput").focus();}
 }
 
-function addDpMsg(text, type, skipFirebase) {
-    var container = document.getElementById("dpChatMessages");
+function addDpMsg(text, type) {
+    var container=document.getElementById("dpChatMessages");
+    // Remove initial system message if it's the placeholder
+    var first=container.querySelector(".dp-msg.system");
+    if(first&&first.textContent.includes("Deadpool kitta pesalaam"))first.remove();
 
-    // Remove "no messages" placeholder if exists
-    var empty = container.querySelector(".dp-msg.system");
-    if (empty && empty.textContent.includes("Deadpool kitta pesalaam")) {
-        empty.remove();
-    }
-
-    var div = document.createElement("div");
-    div.className = "dp-msg " + type;
-    if (type === "bot") {
-        div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(text);
-    } else {
-        div.textContent = text;
-    }
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
+    var div=document.createElement("div"); div.className="dp-msg "+type;
+    if(type==="bot") div.innerHTML='<span class="msg-name">Deadpool 🐱</span>'+escapeHTML(text);
+    else div.textContent=text;
+    container.appendChild(div); container.scrollTop=container.scrollHeight;
 }
 
-function saveChatFirebase(who, text) {
-    if (!db) return;
-    db.ref("dpChat").push({
-        who:  who,
-        text: text,
-        time: new Date().toLocaleString("en-IN",{
-            hour:"2-digit", minute:"2-digit",
-            day:"numeric", month:"short"
-        }),
-        ts: Date.now()
+function saveChatFirebase(who,text){
+    if(!db)return;
+    db.ref("dpChat").push({who:who,text:text,time:new Date().toLocaleString("en-IN",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}),ts:Date.now()});
+}
+
+function loadUserChatHistory() {
+    if(MODE !== "user" || !db) return;
+    var sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+
+    // Load existing history
+    db.ref("dpChat").orderByChild("ts").startAt(sevenDaysAgo).limitToLast(50)
+    .once("value", function(snap) {
+        var msgs = [];
+        snap.forEach(function(c){ msgs.push(c.val()); });
+        if (!msgs.length) return;
+
+        var container = document.getElementById("dpChatMessages");
+        container.innerHTML = "";
+
+        msgs.forEach(function(m) {
+            var div = document.createElement("div");
+            div.className = "dp-msg " + m.who;
+            if (m.who === "bot") {
+                div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(m.text);
+            } else {
+                div.textContent = m.text;
+            }
+            container.appendChild(div);
+            if (m.ts > dpChatLastTs) dpChatLastTs = m.ts;
+        });
+        container.scrollTop = container.scrollHeight;
+
+        // ✅ Start listener AFTER history loaded
+        // Only listen for messages STRICTLY newer than last loaded
+        startNewMessageListener();
     });
 }
 
-// ✅ Load last 7 days of chat history for HER
-function loadUserChatHistory() {
+// ✅ Separate listener — only for VIEWER replies (bot messages you send)
+function startNewMessageListener() {
     if (MODE !== "user" || !db) return;
 
-    var sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    // Only listen from NOW — not old messages
+    var listenFrom = dpChatLastTs > 0 ? dpChatLastTs + 1 : Date.now();
 
-    db.ref("dpChat")
-        .orderByChild("ts")
-        .startAt(sevenDaysAgo)
-        .limitToLast(50)
-        .once("value", function(snap) {
-            var msgs = [];
-            snap.forEach(function(c){ msgs.push(c.val()); });
+    db.ref("dpChat").orderByChild("ts").startAt(listenFrom)
+    .on("child_added", function(snap) {
+        var m = snap.val();
+        if (!m) return;
+        if (m.ts <= dpChatLastTs) return; // skip already shown
 
-            if (!msgs.length) return;
-
-            var container = document.getElementById("dpChatMessages");
-            // Clear default message
-            container.innerHTML = "";
-
-            msgs.forEach(function(m) {
-                var div = document.createElement("div");
-                div.className = "dp-msg " + m.who;
-                if (m.who === "bot") {
-                    div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(m.text);
-                } else {
-                    div.textContent = m.text;
-                }
-                container.appendChild(div);
-
-                // Track last message ts
-                if (m.ts > dpChatLastTs) dpChatLastTs = m.ts;
-            });
-
-            container.scrollTop = container.scrollHeight;
-        });
-
-    // ✅ Listen for NEW messages (your replies from viewer)
-    db.ref("dpChat")
-        .orderByChild("ts")
-        .startAt(Date.now())
-        .on("child_added", function(snap) {
-            var m = snap.val();
-            if (!m) return;
-
-            // Only show new messages after initial load
-            if (m.ts <= dpChatLastTs) return;
+        // ✅ ONLY show bot messages from viewer
+        // Skip user messages — already added locally by sendDpMessage()
+        if (m.who === "bot") {
             dpChatLastTs = m.ts;
-
-            // Only show bot messages (your replies)
-            // User messages are already added locally
-            if (m.who === "bot") {
-                var container = document.getElementById("dpChatMessages");
-                var div = document.createElement("div");
-                div.className = "dp-msg bot";
-                div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(m.text);
-                container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
-
-                // Show bubble too
-                showCatBubble(m.text);
-            }
-        });
+            var container = document.getElementById("dpChatMessages");
+            var div = document.createElement("div");
+            div.className = "dp-msg bot";
+            div.innerHTML = '<span class="msg-name">Deadpool 🐱</span>' + escapeHTML(m.text);
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            showCatBubble(m.text);
+        } else if (m.who === "user") {
+            // Just update the timestamp — message already shown locally
+            dpChatLastTs = m.ts;
+        }
+    });
 }
 
 function sendDpMessage(){
@@ -1018,29 +1022,29 @@ function sendDpMessage(){
     input.value = "";
     catLastAct = Date.now();
 
-    // Add to her chat UI immediately
+    // Add user message to UI
     addDpMsg(msg, "user");
 
-    // Save to Firebase
+    // Save user message to Firebase
     saveChatFirebase("user", msg);
-    dpChatLastTs = Date.now(); // update so we don't re-show
+    dpChatLastTs = Date.now(); // ← update so listener skips this
 
     var typing = document.getElementById("dpTyping");
     typing.classList.add("show");
 
-    // Try Telegram
     if (window.location.protocol === "https:") {
         var tMsg = "💬 Bold Auntyyyy says to Deadpool:\n\"" + msg + "\"\n⏰ " +
             new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
 
         fetch("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage", {
-            method:  "POST",
+            method: "POST",
             headers: { "Content-Type": "application/json" },
-            body:    JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: tMsg })
+            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: tMsg })
         })
         .then(function(r){ return r.json(); })
         .then(function(d){
             if (d.ok) {
+                // Telegram sent — wait for human reply, NO auto preset
                 typing.classList.remove("show");
                 var c   = document.getElementById("dpChatMessages");
                 var div = document.createElement("div");
@@ -1048,175 +1052,128 @@ function sendDpMessage(){
                 div.textContent = "📱 Message sent! Reply-ku wait pannu di... 💜";
                 c.appendChild(div);
                 c.scrollTop = c.scrollHeight;
+                // ✅ Do NOT call usePreset here
             } else {
+                // Telegram failed → use preset
                 usePreset(msg);
             }
         })
-        .catch(function(){ usePreset(msg); });
+        .catch(function() { usePreset(msg); });
+
     } else {
-        // file:// always preset
+        // file:// → always use preset
         setTimeout(function(){ usePreset(msg); }, 1200 + Math.random() * 800);
     }
 }
 
-function usePreset(msg){
+function usePreset(msg) {
     setTimeout(function() {
         document.getElementById("dpTyping").classList.remove("show");
         var reply = getDpResponse(msg);
+
+        // ✅ Add to UI first
         addDpMsg(reply, "bot");
-        saveChatFirebase("bot", reply);
         showCatBubble(reply);
+
+        // ✅ Save to Firebase AFTER updating dpChatLastTs
+        // so the listener doesn't re-add it
+        dpChatLastTs = Date.now();
+        saveChatFirebase("bot", reply);
+
     }, 1200 + Math.random() * 800);
 }
 
 // ============================================================
-// ✅ VIEWER CHAT — see her messages + reply as Deadpool
+// ✅ VIEWER CHAT
 // ============================================================
-var viewerChatOpen = false;
-var viewerUnreadCount = 0;
-var viewerLastTs = Date.now();
+var viewerChatOpen=false, viewerUnreadCount=0, viewerLastTs=Date.now();
 
 function toggleViewerChat() {
-    viewerChatOpen = !viewerChatOpen;
-    var win = document.getElementById("viewerChatWindow");
-    win.classList.toggle("open", viewerChatOpen);
-
-    if (viewerChatOpen) {
-        // Reset unread
-        viewerUnreadCount = 0;
-        var badge = document.getElementById("chatUnreadBadge");
-        badge.style.display = "none";
-        badge.textContent = "0";
-        setTimeout(function(){
-            document.getElementById("viewerChatInput").focus();
-        }, 100);
+    viewerChatOpen=!viewerChatOpen;
+    document.getElementById("viewerChatWindow").classList.toggle("open",viewerChatOpen);
+    if(viewerChatOpen){
+        viewerUnreadCount=0;
+        var badge=document.getElementById("chatUnreadBadge");
+        badge.style.display="none"; badge.textContent="0";
+        setTimeout(function(){document.getElementById("viewerChatInput").focus();},100);
     }
 }
 
 function sendViewerReply() {
-    var input = document.getElementById("viewerChatInput");
-    var msg   = input.value.trim();
-    if (!msg) { showToast("⚠️ Type a message first!", "error"); return; }
-    if (!db)  { showToast("❌ Not connected!", "error"); return; }
+    var input=document.getElementById("viewerChatInput");
+    var msg=input.value.trim();
+    if(!msg){showToast("⚠️ Type a message first!","error");return;}
+    if(!db){showToast("❌ Not connected!","error");return;}
+    input.value="";
 
-    input.value = "";
+    var entry={who:"bot",text:msg,time:new Date().toLocaleString("en-IN",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}),ts:Date.now()};
 
-    var entry = {
-        who:  "bot",
-        text: msg,
-        time: new Date().toLocaleString("en-IN",{
-            hour:"2-digit", minute:"2-digit",
-            day:"numeric", month:"short"
-        }),
-        ts: Date.now()
-    };
-
-    // ✅ Save to Firebase — her chat listens and shows it automatically
+    // Save to Firebase → her chat listens and shows automatically
     db.ref("dpChat").push(entry);
 
-    showToast("💜 Sent! She will see it in her chat!", "success");
+    // Add to viewer window
+    var container=document.getElementById("viewerChatMessages");
+    var div=document.createElement("div"); div.className="dp-msg bot";
+    div.innerHTML='<span class="msg-name">You (as Deadpool 🐱)</span>'+escapeHTML(msg);
+    container.appendChild(div); container.scrollTop=container.scrollHeight;
 
-    // Add to viewer chat window too
-    var container = document.getElementById("viewerChatMessages");
-    var div = document.createElement("div");
-    div.className = "dp-msg bot";
-    div.innerHTML = '<span class="msg-name">You (as Deadpool 🐱)</span>' + escapeHTML(msg);
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-}
-// ✅ Clean up messages older than 7 days
-function cleanOldChatMessages() {
-    if (!db || MODE !== "user") return;
-    var sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    db.ref("dpChat")
-        .orderByChild("ts")
-        .endAt(sevenDaysAgo)
-        .once("value", function(snap) {
-            snap.forEach(function(child) {
-                child.ref.remove();
-            });
-        });
+    showToast("💜 Sent! She will see it in her chat!","success");
 }
 
-// ============================================================
-// ✅ LISTEN TO CHAT — unified function for viewer
-// ============================================================
+// ✅ UNIFIED chat listener — updates both viewer window and chat log
 function listenToChatLog() {
-    if (MODE !== "viewer" || !db) return;
+    if(MODE!=="viewer"||!db)return;
 
-    db.ref("dpChat").orderByChild("ts").limitToLast(50).on("value", function(snap) {
-        var msgs = [];
-        snap.forEach(function(c){ msgs.push(c.val()); });
+    db.ref("dpChat").orderByChild("ts").limitToLast(50).on("value",function(snap){
+        var msgs=[];
+        snap.forEach(function(c){msgs.push(c.val());});
 
-        // Check for new messages
-        msgs.forEach(function(m) {
-            if (m.who === "user" && m.ts > viewerLastTs) {
-                viewerLastTs = m.ts;
-
-                // Toast notification
-                showToast("💬 She said: \"" + m.text.substring(0,35) + "\"", "info");
-
-                // Increment unread if chat closed
-                if (!viewerChatOpen) {
+        // Check for new user messages
+        msgs.forEach(function(m){
+            if(m.who==="user"&&m.ts>viewerLastTs){
+                viewerLastTs=m.ts;
+                showToast("💬 She said: \""+m.text.substring(0,35)+"\"","info");
+                if(!viewerChatOpen){
                     viewerUnreadCount++;
-                    var badge = document.getElementById("chatUnreadBadge");
-                    badge.textContent = viewerUnreadCount;
-                    badge.style.display = "flex";
+                    var badge=document.getElementById("chatUnreadBadge");
+                    badge.textContent=viewerUnreadCount;
+                    badge.style.display="flex";
                 }
-
-                // Desktop notification
-                if ("Notification" in window && Notification.permission === "granted") {
-                    new Notification("💬 Bold Auntyyyy says:", { body: m.text });
+                if("Notification"in window&&Notification.permission==="granted"){
+                    new Notification("💬 Bold Auntyyyy says:",{body:m.text});
                 }
             }
         });
 
-        // ✅ Update VIEWER chat window
-        var viewerContainer = document.getElementById("viewerChatMessages");
-        if (viewerContainer) {
-            viewerContainer.innerHTML = "";
-            if (!msgs.length) {
-                viewerContainer.innerHTML = '<div class="dp-msg system">No messages yet. She hasn\'t chatted! 🐱</div>';
+        // Update viewer chat window
+        var viewerContainer=document.getElementById("viewerChatMessages");
+        if(viewerContainer){
+            viewerContainer.innerHTML="";
+            if(!msgs.length){
+                viewerContainer.innerHTML='<div class="dp-msg system">No messages yet 🐱</div>';
             } else {
-                msgs.forEach(function(m) {
-                    var div = document.createElement("div");
-                    div.className = "dp-msg " + m.who;
-                    if (m.who === "bot") {
-                        div.innerHTML = '<span class="msg-name">Deadpool 🐱 (You replied)</span>' + escapeHTML(m.text);
-                    } else {
-                        div.innerHTML = '<span class="msg-name">Bold Auntyyyy 💜</span>' + escapeHTML(m.text);
-                    }
+                msgs.forEach(function(m){
+                    var div=document.createElement("div"); div.className="dp-msg "+m.who;
+                    if(m.who==="bot") div.innerHTML='<span class="msg-name">Deadpool 🐱 (You)</span>'+escapeHTML(m.text);
+                    else div.innerHTML='<span class="msg-name">Bold Auntyyyy 💜</span>'+escapeHTML(m.text);
                     viewerContainer.appendChild(div);
                 });
-                viewerContainer.scrollTop = viewerContainer.scrollHeight;
+                viewerContainer.scrollTop=viewerContainer.scrollHeight;
             }
         }
 
-        // ✅ Update Chat Log panel
-        var body = document.getElementById("chatLogBody");
-        if (!msgs.length) {
-            body.innerHTML = '<div class="cl-empty">No chats yet 🐱</div>';
+        // Update chat log panel
+        var body=document.getElementById("chatLogBody");
+        if(!msgs.length){
+            body.innerHTML='<div class="cl-empty">No chats yet 🐱</div>';
         } else {
-            body.innerHTML = "";
-            msgs.forEach(function(m) {
-                var div = document.createElement("div");
-                div.className = "cl-msg " + m.who;
-                div.innerHTML =
-                    '<div class="cl-who">' + (m.who==="user" ? "Bold Auntyyyy 💜" : "Deadpool 🐱") + '</div>'
-                    + escapeHTML(m.text)
-                    + '<div class="cl-time">⏰ ' + m.time + '</div>';
+            body.innerHTML="";
+            msgs.forEach(function(m){
+                var div=document.createElement("div"); div.className="cl-msg "+m.who;
+                div.innerHTML='<div class="cl-who">'+(m.who==="user"?"Bold Auntyyyy 💜":"Deadpool 🐱")+'</div>'+escapeHTML(m.text)+'<div class="cl-time">⏰ '+m.time+'</div>';
                 body.appendChild(div);
             });
-            body.scrollTop = body.scrollHeight;
-        }
-
-        // ✅ Also update her chat window if in user mode and open
-        if (MODE === "user") {
-            var userContainer = document.getElementById("dpChatMessages");
-            if (userContainer && msgs.length) {
-                // Only add new bot messages that she hasn't seen
-                // (handled by sendDpMessage / usePreset)
-            }
+            body.scrollTop=body.scrollHeight;
         }
     });
 }
@@ -1265,7 +1222,7 @@ function switchGame(side,game,btn){
 // ============================================================
 // ACTIVITY TRACKING
 // ============================================================
-var lastInteractionTime=Date.now(),trackThrottle=false;
+var lastInteractionTime=Date.now(), trackThrottle=false;
 
 function initSmartTracking(){
     if(MODE!=="user")return;
@@ -1433,19 +1390,12 @@ function initFirebase(){
             var data=snap.val();if(data){var now=Date.now();tasks=(data.tasks||[]).filter(function(t){return t.expiresAt>now;});totalXP=data.totalXP||0;streak=data.streak||0;renderTasks();updateStats();updateLevel();updateStreak();}
             db.ref("moodLog").once("value",function(mSnap){var raw=mSnap.val();if(raw){var log=Object.values(raw).sort(function(a,b){return b.ts-a.ts;});try{localStorage.setItem("moodLog_fb",JSON.stringify(log));}catch(e){}renderMoodLog(log);}
                 startLiveListeners();
-                if(MODE==="user")scheduleMoodModal();
+                if(MODE==="user"){scheduleMoodModal();setTimeout(loadUserChatHistory,2000);setTimeout(cleanOldChatMessages,5000);}
                 if(MODE==="viewer"){listenToPresence();listenToChatLog();}
             });
         });
     }catch(e){console.error(e);setSyncStatus("❌ Offline mode","#ff6b6b","rgba(255,107,107,0.1)","rgba(255,107,107,0.3)");if(MODE==="user")scheduleMoodModal();}
 }
-if (MODE === "user") {
-    // Load chat history after Firebase is ready
-    setTimeout(function() {
-        loadUserChatHistory();
-    }, 2000);
-}
-
 
 function startLiveListeners(){
     if(!db)return;
@@ -1500,7 +1450,7 @@ function showToast(msg,type){var t=document.getElementById("toast");t.textConten
 function escapeHTML(str){var d=document.createElement("div");d.appendChild(document.createTextNode(str));return d.innerHTML;}
 
 // ============================================================
-// ✅ SETUP VIEWER MODE
+// VIEWER MODE SETUP
 // ============================================================
 function setupViewerMode(){
     if(MODE!=="viewer")return;
@@ -1512,18 +1462,12 @@ function setupViewerMode(){
     document.getElementById("inputSection").style.opacity      = "0.4";
     document.getElementById("inputSection").style.pointerEvents= "none";
     document.getElementById("logPanel").style.display          = "block";
-
-    // Hide user-only elements
     document.getElementById("dpCatContainer").style.display    = "none";
     document.getElementById("dpChatWindow").style.display      = "none";
-
-    // ✅ Show viewer chat button
     document.getElementById("viewerChatBtn").style.display     = "flex";
-
-  
-
-    if("Notification"in window&&Notification.permission==="default")
-        Notification.requestPermission();
+    var tester=document.getElementById("themeTester");
+    if(tester)tester.style.display="none";
+    if("Notification"in window&&Notification.permission==="default")Notification.requestPermission();
 }
 
 // ============================================================
@@ -1550,7 +1494,7 @@ if (MODE === "user") {
     (function(){ var h=new Date().getHours(); if(h>=22||h<6)setCatState("sleeping"); else setCatState("idle"); })();
 
     setTimeout(function(){
-        var h=new Date().getHours();var msg;
+        var h=new Date().getHours(); var msg;
         if(h<6)      msg="Ayyo, late-a irukku di! Rest eduthukkonga! 🌙";
         else if(h<12)msg="Good morning di! Ready for an awesome day? ☀️";
         else if(h<17)msg="Afternoon-la work panra nee! Deadpool salute! 💪";
@@ -1565,10 +1509,6 @@ if (MODE === "user") {
         var slider=document.getElementById("themeSlider");
         if(slider){slider.value=val;previewTime(val);}
     }, 300);
-}
-// Clean old messages once a day
-if (MODE === "user") {
-    setTimeout(cleanOldChatMessages, 5000);
 }
 
 setInterval(changeQuote, 30000);
