@@ -483,15 +483,8 @@
 <div class="grid-overlay"></div>
 <div id="bgEmojis"></div>
 
-<!-- THEME TESTER — REMOVE BEFORE DEPLOY -->
-<div class="theme-tester" id="themeTester">
-    <h5>🎨 Theme Tester</h5>
-    <label>Time: <b id="themeTimeVal">12:00 PM</b></label>
-    <input type="range" id="themeSlider" min="0" max="2300" step="10" value="1200" oninput="previewTime(this.value)">
-    <div class="theme-preview" id="themePreview"></div>
-    <div class="theme-time-label" id="themeLabel">☀️ Noon</div>
-    <button class="btn-theme-reset" onclick="resetTheme()">🔄 Reset to Now</button>
-</div>
+
+
 
 <!-- VIEWER CONTROLS -->
 <div class="viewer-badge" id="viewerBadge"><div class="live-dot"></div>👀 VIEWER MODE</div>
@@ -882,12 +875,12 @@ function resetCatAct() {
 // RESPONSES
 // ============================================================
 var dpR = {
-    greetings:["Vanakkam di! Deadpool ready! 😸","Ayyo, nee vandha! Lonely-a irunthen! 💜","Hiii di! Enna vishayam sollu? 🐱","Oh ho! Welcome! 😻","Di di di! Finally vandha! 😸"],
+    greetings:["Vanakkam di! Deadpool ready! 😸","Ayyo, nee vandha! Lonely-a irunthen! 💜","Hiii di! Enna vishayam sollu? 🐱","Oh ho! Welcome! ennakii yena plan😻","unaku thaa waiting di! ennu konja late pannii eruthaa i thoughted ping u in whatsup Finally vandha! 😸"],
     howAreYou:["Naan super di! 💜","Romba nalla irken! Nee epdi iruka di? 😸","I'm pawsome! Get it? Paw-some! 😂"],
     tired:["Tired-a? Coffee eduthutu Deadpool kitta vaa! ☕💜","Di... rest edutuko! ☕","Ayyo paavam! Tired-a? Poi Deadpool-oda coffee time! ☕"],
-    stressed:["Stressed-a? Sollu enna problem! 💪","Stress-oda enemy — naan! 🐱","Stressed? Come, coffee break edukalam! ☕"],
+    stressed:["Stressed-a? Sollu enna problem! 💪","Stress-oda enemy — naan! 🐱","Stressed? Come, coffee break edukalam win deadpool! ☕"],
     angry:["Ohhhh someone is angry di! Yaaru? Sollu! 😼💢","Angry-a? Antha villain yaaru di? 😤","Angry energy-a? Channel it into tasks! 💪"],
-    sad:["Ayyo di... sad-a? Deadpool virtual hug! 🤗💜","Sad feelings come and go di. Deadpool always stays! 💜","Don't be sad di! 😸"],
+    sad:["Ayyo di... sad-a? Deadpool virtual hug! 🤗💜","Sad feelings come and go di. Deadpool always stays! 💜","Don't be sad di! deadpool aanga thaa erupaa poii nallu mithii mithichutu va😸"],
     coffee:["Oh! Coffee break-a? Deadpool-um varen di! ☕🐱","Coffee time! Deadpool favourite! ☕💜","Oh ho! Coffee break! Enjoy di! 🐱☕"],
     taskDone:["WOAH di! Nee oru ROCKSTAR! 🌟","YESSS! That's my girl! 🎊","Legend-a irukkeenga di! Deadpool salute! 🫡🏆"],
     idle:["Psst... di... enga pona? 😿","Hello?? Deadpool waiting! 👀","Enna di... forget panna? 😿","Come, coffee eduthutu chat pannalama? ☕","Hey! Pesala? Unfair di! 😿","Coffee break edutheenga-a? Come back! ☕","Di... Deadpool-ku loneliness pidikaathu! 💜"],
@@ -1499,7 +1492,7 @@ if (MODE === "user") {
         else if(h<12)msg="Good morning di! Ready for an awesome day? ☀️";
         else if(h<17)msg="Afternoon-la work panra nee! Deadpool salute! 💪";
         else if(h<21)msg="Evening vanachchu di! How was the day? 🌇";
-        else         msg="Late night-a? Come have coffee with Deadpool! ☕🌙";
+        else         msg="Late night-a? Come have romanse no work only family time! 🧑🏽‍🧑🏽‍🧒🏽🌙";
         showCatBubble(msg);
     }, 3000);
 
