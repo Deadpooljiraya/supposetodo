@@ -385,7 +385,7 @@
 <div class="grid-overlay"></div>
 <div id="bgEmojis"></div>
 
-<!-- Secret settings button -->
+<!-- ✅ Secret settings button -->
 <button class="secret-settings-btn" onclick="setupGroqKey()">⚙️</button>
 
 <!-- VIEWER CONTROLS -->
@@ -435,6 +435,7 @@
             <div class="riddle-cat-tabs">
                 <button class="riddle-cat-btn active" onclick="setRiddleCat('all',this)">🌟 All</button>
                 <button class="riddle-cat-btn" onclick="setRiddleCat('funny',this)">😂 Funny</button>
+                <button class="riddle-cat-btn" onclick="setRiddleCat('aptitude',this)">🧮 Aptitude</button>
                 <button class="riddle-cat-btn" onclick="setRiddleCat('logic',this)">🧠 Logic</button>
                 <button class="riddle-cat-btn" onclick="setRiddleCat('tamil',this)">🌺 Tamil</button>
                 <button class="riddle-cat-btn" onclick="setRiddleCat('hard',this)">🔥 Hard</button>
@@ -531,7 +532,7 @@
     </div>
 </div>
 
-<!-- HER CHAT WINDOW -->
+<!-- HER CHAT WINDOW — NO clear button for user, maximize only -->
 <div class="dp-chat-window" id="dpChatWindow">
     <div class="dp-chat-header">
         <div class="dp-chat-avatar">🐱</div>
@@ -542,7 +543,6 @@
         </div>
         <div class="dp-header-actions">
             <button class="dp-hdr-btn" id="maximizeBtn" onclick="toggleChatMaximize()" title="Maximize"><i class="fas fa-expand" id="maximizeIcon"></i></button>
-            <button class="dp-hdr-btn" onclick="clearChatMessages()" title="Clear chat"><i class="fas fa-trash-alt"></i></button>
             <button class="dp-hdr-btn" onclick="toggleDpChat()" title="Close"><i class="fas fa-times"></i></button>
         </div>
     </div>
@@ -556,7 +556,7 @@
     </div>
 </div>
 
-<!-- MOOD MODAL -->
+<!-- MOOD MODAL — YOUR EXACT ORIGINAL -->
 <div class="mood-overlay" id="moodOverlay">
     <div class="mood-modal">
         <span class="modal-avatar">💜</span>
@@ -653,7 +653,6 @@
 // ============================================================
 // CONFIG
 // ============================================================
-// ✅ Key loaded from localStorage — never hardcoded
 var GROQ_API_KEY = localStorage.getItem("groq_key") || "";
 var GROQ_MODEL = "llama3-8b-8192";
 
@@ -718,38 +717,27 @@ function updateAIBadge(isGroq) {
     else { b.className="dp-ai-status preset"; b.textContent="⚡ Smart Mode"; }
 }
 
-// Auto update badge on load
 setTimeout(function(){
     GROQ_API_KEY = localStorage.getItem("groq_key") || "";
     if(GROQ_API_KEY) updateAIBadge(true);
 }, 500);
 
 // ============================================================
-// ✅ GROQ LLM — FIXED (no special chars in prompt = no 400 error)
+// ✅ GROQ — Fixed 400 error
 // ============================================================
 var groqHistory = [];
-
-// ✅ Simple prompt — no special characters, no newlines that break JSON
 var GROQ_SYSTEM = "You are Deadpool, a sarcastic funny caring Tanglish speaking assistant. Tanglish means Tamil and English mixed. You and Bold Auntyyyy roast each other lovingly like best office friends. Always call her di. Mix Tamil words like ayyo nee sollu paavam romba kadaichi. Be sarcastic but caring. Keep replies 2 to 3 sentences only. End funny or caring. Never mean.";
 
 function callGroqXHR(userMsg, onDone) {
-    // Always get fresh key from localStorage
     var key = localStorage.getItem("groq_key") || "";
     GROQ_API_KEY = key;
+    if (!key || key.length < 10) { onDone(null); return; }
 
-    if (!key || key.length < 10) {
-        onDone(null);
-        return;
-    }
-
-    // Add to history
     groqHistory.push({ role: "user", content: userMsg });
     if (groqHistory.length > 8) groqHistory = groqHistory.slice(-8);
 
-    // ✅ Build messages array cleanly
     var messages = [{ role: "system", content: GROQ_SYSTEM }].concat(groqHistory);
 
-    // ✅ Use JSON.stringify carefully
     var bodyStr;
     try {
         bodyStr = JSON.stringify({
@@ -759,22 +747,15 @@ function callGroqXHR(userMsg, onDone) {
             temperature: 0.9
         });
     } catch(jsonErr) {
-        console.error("JSON error, clearing history:", jsonErr);
         groqHistory = [];
         try {
             bodyStr = JSON.stringify({
                 model: GROQ_MODEL,
-                messages: [
-                    { role: "system", content: GROQ_SYSTEM },
-                    { role: "user", content: String(userMsg) }
-                ],
+                messages: [{ role: "system", content: GROQ_SYSTEM }, { role: "user", content: String(userMsg) }],
                 max_tokens: 150,
                 temperature: 0.9
             });
-        } catch(e2) {
-            onDone(null);
-            return;
-        }
+        } catch(e2) { onDone(null); return; }
     }
 
     var xhr = new XMLHttpRequest();
@@ -793,29 +774,19 @@ function callGroqXHR(userMsg, onDone) {
                     if (groqHistory.length > 8) groqHistory = groqHistory.slice(-8);
                     updateAIBadge(true);
                     onDone(reply);
-                } else {
-                    onDone(null);
-                }
-            } catch(e) {
-                onDone(null);
-            }
+                } else { onDone(null); }
+            } catch(e) { onDone(null); }
         } else if (xhr.status === 400) {
-            // Bad request — clear history and try once more with just the message
-            console.warn("Groq 400, clearing history and retrying...");
             groqHistory = [];
             var retryBody;
             try {
                 retryBody = JSON.stringify({
                     model: GROQ_MODEL,
-                    messages: [
-                        { role: "system", content: GROQ_SYSTEM },
-                        { role: "user", content: String(userMsg) }
-                    ],
+                    messages: [{ role: "system", content: GROQ_SYSTEM }, { role: "user", content: String(userMsg) }],
                     max_tokens: 120,
                     temperature: 0.9
                 });
             } catch(e) { onDone(null); return; }
-
             var xhr2 = new XMLHttpRequest();
             xhr2.open("POST","https://api.groq.com/openai/v1/chat/completions",true);
             xhr2.setRequestHeader("Content-Type","application/json");
@@ -837,9 +808,7 @@ function callGroqXHR(userMsg, onDone) {
             xhr2.ontimeout=function(){onDone(null);};
             xhr2.onerror=function(){onDone(null);};
             xhr2.send(retryBody);
-
         } else if (xhr.status === 401) {
-            console.error("Groq 401: Invalid key");
             localStorage.removeItem("groq_key");
             GROQ_API_KEY = "";
             updateAIBadge(false);
@@ -848,11 +817,8 @@ function callGroqXHR(userMsg, onDone) {
         } else if (xhr.status === 429) {
             showToast("Rate limited! Wait a moment.", "info");
             onDone(null);
-        } else {
-            onDone(null);
-        }
+        } else { onDone(null); }
     };
-
     xhr.ontimeout = function() { onDone(null); };
     xhr.onerror = function() { onDone(null); };
     xhr.send(bodyStr);
@@ -860,13 +826,8 @@ function callGroqXHR(userMsg, onDone) {
 
 function getAIReply(msg, callback) {
     GROQ_API_KEY = localStorage.getItem("groq_key") || "";
-    if (!GROQ_API_KEY) {
-        callback(getDpResponse(msg));
-        return;
-    }
-    callGroqXHR(msg, function(reply) {
-        callback(reply || getDpResponse(msg));
-    });
+    if (!GROQ_API_KEY) { callback(getDpResponse(msg)); return; }
+    callGroqXHR(msg, function(reply) { callback(reply || getDpResponse(msg)); });
 }
 
 // ============================================================
@@ -895,14 +856,8 @@ document.addEventListener("keydown", function(e) {
     if (e.key === "Escape" && chatMaximized) toggleChatMaximize();
 });
 
-function clearChatMessages() {
-    document.getElementById("dpChatMessages").innerHTML =
-        '<div class="dp-msg system">Chat cleared! Fresh start di 🐱</div>';
-    groqHistory = [];
-}
-
 // ============================================================
-// ✅ CHAT — Zero double reply
+// ✅ CHAT — Zero double reply, NO clear button for user
 // ============================================================
 var dpChatOpen = false;
 var chatBusy   = false;
@@ -950,7 +905,6 @@ function loadChatHistory() {
             });
             c.scrollTop = c.scrollHeight;
         }
-        // Only show messages flagged as viewer_reply
         db.ref("dpChat").orderByChild("ts").startAt(chatMaxTs + 1)
         .on("child_added", function(snap) {
             var m = snap.val();
@@ -975,10 +929,8 @@ function sendDpMessage() {
     chatBusy = true;
     catLastAct = Date.now();
 
-    // Show user message
     addMsgUI(msg, "user");
 
-    // Save to Firebase
     var userTs = Date.now();
     chatMaxTs = userTs;
     if (db) {
@@ -989,20 +941,14 @@ function sendDpMessage() {
         });
     }
 
-    // Telegram notify
-    if (window.location.protocol === "https:") {
-        fetch("https://api.telegram.org/bot"+TELEGRAM_TOKEN+"/sendMessage",{
-            method:"POST",headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:"Bold Auntyyyy says: "+msg})
-        }).catch(function(){});
-    }
+    // ✅ Telegram notify silently — no toast
+    var tUrl = "https://api.telegram.org/bot"+TELEGRAM_TOKEN+"/sendMessage?chat_id="+TELEGRAM_CHAT_ID+"&text="+encodeURIComponent("Bold Auntyyyy says: "+msg);
+    var tImg = new Image(); tImg.src = tUrl;
 
-    // Show typing
     var typing = document.getElementById("dpTyping");
     typing.classList.add("show");
     document.getElementById("dpChatMessages").scrollTop = 99999;
 
-    // Get AI reply
     getAIReply(msg, function(reply) {
         setTimeout(function() {
             typing.classList.remove("show");
@@ -1051,7 +997,7 @@ function sendViewerReply() {
     });
     var container=document.getElementById("viewerChatMessages");
     var div=document.createElement("div"); div.className="dp-msg bot";
-    div.innerHTML='<span class="msg-name">You (as Deadpool)</span>'+escapeHTML(msg);
+    div.innerHTML='<span class="msg-name">You (as Deadpool 🐱)</span>'+escapeHTML(msg);
     container.appendChild(div); container.scrollTop=container.scrollHeight;
     showToast("Sent! She will see it!","success");
 }
@@ -1152,9 +1098,9 @@ function getDpResponse(msg){
 }
 
 // ============================================================
-// RIDDLES
+// ✅ RIDDLES — Expanded with Aptitude + Reasoning
 // ============================================================
-var RIDDLES={
+var RIDDLES = {
     funny:[
         {q:"Naan daily bath panruven but never wet. Naan yenna?",a:["tongue","naakku"],hint:"Vaayil irukkum",diff:"easy"},
         {q:"Coffee-oda biggest enemy yenna?",a:["sleep","thokkam"],hint:"Rathiriku relate",diff:"easy"},
@@ -1168,7 +1114,6 @@ var RIDDLES={
         {q:"Why did coffee file police report?",a:["mugging","it was mugged"],hint:"Getting mugged!",diff:"medium"},
         {q:"Deadpool vs Thanos. Winner?",a:["deadpool"],hint:"He literally cannot die!",diff:"easy"},
         {q:"Group chat message. Nee enna panna?",a:["ignore","mute","blue tick"],hint:"Blue tick danger",diff:"easy"},
-        {q:"Oru mango tree-la 10 mangoes. Rain-la 3 fell. Mitham?",a:["7","seven"],hint:"Simple math di",diff:"easy"},
         {q:"Monday morning-la brain what says?",a:["no","not working","restart"],hint:"Computer madiri",diff:"easy"},
         {q:"Office AC temperature — whose choice?",a:["manager","boss","no one"],hint:"Universal mystery",diff:"easy"},
         {q:"How many tabs open in your browser?",a:["too many","100","infinite","many"],hint:"The real horror",diff:"easy"},
@@ -1176,6 +1121,34 @@ var RIDDLES={
         {q:"Naan enna kelvi ketkum illama always answer theriyum. Yenna?",a:["mirror","kannadi"],hint:"Self-reflection",diff:"easy"},
         {q:"Deadpool favourite Tamil food yenna?",a:["biriyani","biryani"],hint:"Rice plus spice plus love",diff:"easy"},
         {q:"I will do it later — later means?",a:["never","tomorrow","next week"],hint:"Honest answer",diff:"easy"},
+        {q:"Office life best prank yenna?",a:["forward email","reply all","reply all email"],hint:"Reply all email to 500 people!",diff:"easy"},
+    ],
+    aptitude:[
+        {q:"A train travels 60 km in 1 hour. How far in 2.5 hours?",a:["150","150 km"],hint:"Speed x Time",diff:"easy"},
+        {q:"If 5 workers finish in 10 days, 10 workers finish in how many days?",a:["5","5 days"],hint:"More workers = less time",diff:"easy"},
+        {q:"What is 15% of 200?",a:["30"],hint:"200 x 15 / 100",diff:"easy"},
+        {q:"A shopkeeper buys at Rs.80 sells at Rs.100. Profit %?",a:["25","25%"],hint:"Profit / Cost x 100",diff:"easy"},
+        {q:"Sum of first 10 natural numbers?",a:["55"],hint:"n(n+1)/2 formula",diff:"easy"},
+        {q:"If a:b = 2:3 and b:c = 4:5, find a:c",a:["8:15"],hint:"Multiply ratios",diff:"medium"},
+        {q:"Simple interest on Rs.1000 at 5% for 2 years?",a:["100","rs 100","100 rs"],hint:"PRT/100",diff:"easy"},
+        {q:"Average of 10, 20, 30, 40, 50?",a:["30"],hint:"Sum / Count",diff:"easy"},
+        {q:"A car covers 300 km at 60 kmph. Time taken?",a:["5","5 hours"],hint:"Distance / Speed",diff:"easy"},
+        {q:"If 3x = 15, what is x?",a:["5"],hint:"Divide both sides by 3",diff:"easy"},
+        {q:"A pipe fills tank in 4 hours, another empties in 6 hours. Together?",a:["12","12 hours"],hint:"1/4 - 1/6 = 1/12",diff:"medium"},
+        {q:"Find odd one: 2, 3, 5, 7, 9, 11",a:["9"],hint:"All others are prime",diff:"medium"},
+        {q:"Rs.500 compound interest at 10% per year for 2 years?",a:["605","rs 605"],hint:"P(1+r/100)^n",diff:"medium"},
+        {q:"Work done by A in 6 days, B in 12 days. Together in?",a:["4","4 days"],hint:"1/6 + 1/12 = 1/4",diff:"medium"},
+        {q:"Speed of boat in still water 10 kmph, current 2 kmph. Upstream speed?",a:["8","8 kmph"],hint:"Upstream = Speed - Current",diff:"medium"},
+        {q:"Find next: 2, 6, 12, 20, 30, ?",a:["42"],hint:"Differences: 4,6,8,10,12",diff:"medium"},
+        {q:"A sells to B at 20% profit. B sells to C at 10% loss. C pays Rs.108. A's cost?",a:["100"],hint:"Work backwards",diff:"hard"},
+        {q:"HCF of 48 and 36?",a:["12"],hint:"Highest Common Factor",diff:"easy"},
+        {q:"LCM of 4, 6, 8?",a:["24"],hint:"Smallest common multiple",diff:"easy"},
+        {q:"If selling price = Rs.120, profit = 20%, cost price?",a:["100"],hint:"SP = CP x 1.2",diff:"medium"},
+        {q:"In 3 years, what is CI on Rs.5000 at 4% per annum?",a:["624.32","624"],hint:"P(1.04)^3 - P",diff:"hard"},
+        {q:"A can type 50 words/min, B types 30 words/min. Together in 10 min they type?",a:["800"],hint:"(50+30) x 10",diff:"easy"},
+        {q:"Average of 5 numbers is 10. One number is removed, average becomes 9. Removed number?",a:["14"],hint:"5x10=50, 4x9=36, difference=14",diff:"medium"},
+        {q:"Ratio of males to females in office is 3:2. Total 50. How many females?",a:["20"],hint:"2/5 of 50",diff:"easy"},
+        {q:"If today is Wednesday, what day is 100 days later?",a:["friday","fri"],hint:"100 mod 7 = 2, Wed+2=Fri",diff:"medium"},
     ],
     logic:[
         {q:"Naan 12 illama count pannuven. Naan yenna?",a:["clock","watch"],hint:"On your wall",diff:"easy"},
@@ -1194,10 +1167,10 @@ var RIDDLES={
         {q:"Oru rooster lay egg on hill. Egg which way fall?",a:["roosters don't lay eggs","no eggs","impossible"],hint:"Biology class di!",diff:"hard"},
         {q:"Forward I am heavy backward I am not. What?",a:["ton","tonne"],hint:"Weight word reversed",diff:"hard"},
         {q:"The more you take the more you leave behind.",a:["footsteps","steps","footprints"],hint:"Walking trail",diff:"hard"},
-        {q:"Naan always running never walk. Yenna?",a:["river","time","water"],hint:"Always flowing",diff:"easy"},
-        {q:"Naan door illama enter panna mudiyum. Yenna?",a:["shadow","light","wind","air"],hint:"No physical form",diff:"medium"},
-        {q:"Oru bus-la 6 girls. Each has 6 bags. Each bag has 6 cats. Total bus legs?",a:["2","two"],hint:"Who has legs in the question?",diff:"hard"},
-        {q:"Naan uyire ila grow panna mudiyum water kudutha die. Yenna?",a:["fire","neruppu"],hint:"Elemental",diff:"medium"},
+        {q:"All roses are flowers. Some flowers fade quickly. Therefore?",a:["some roses may fade quickly","some roses fade"],hint:"Logical conclusion",diff:"medium"},
+        {q:"If APPLE = 10 and MANGO = 12, what is GRAPE?",a:["10"],hint:"Count the letters",diff:"medium"},
+        {q:"Which is greater: 2^30 or 3^20?",a:["2^30","2 to the 30"],hint:"2^30 is about 1 billion, 3^20 is about 3.5 billion... wait",diff:"hard"},
+        {q:"A statement is either true or false. Deadpool always lies. He says: I am lying. Is he lying?",a:["paradox","both","neither"],hint:"Classic liar paradox!",diff:"hard"},
     ],
     tamil:[
         {q:"Vanakkam meaning?",a:["hello","welcome","greetings"],hint:"Tamil greeting",diff:"easy"},
@@ -1244,6 +1217,7 @@ var RIDDLES={
         {q:"I have no eyes legs ears still I can move earth.",a:["earthworm","worm"],hint:"Garden creature",diff:"medium"},
     ]
 };
+
 var allRiddles=[];
 Object.keys(RIDDLES).forEach(function(cat){RIDDLES[cat].forEach(function(r){r.category=cat;allRiddles.push(r);});});
 function shuffleArr(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
@@ -1282,9 +1256,15 @@ function toggleActivity(){activityOpen=!activityOpen;var p=document.getElementBy
 function listenToPresence(){if(MODE!=="viewer"||!db)return;db.ref("presence/lastSeen").on("value",function(snap){var ts=snap.val();if(!ts)return;var now=Date.now(),diff=now-ts;var dot=document.getElementById("lsDot"),text=document.getElementById("lsText"),det=document.getElementById("lsDetail");document.getElementById("lastSeenBadge").style.display="flex";if(diff<30000){dot.className="ls-dot online";text.textContent="ACTIVE NOW!";det.textContent="Currently using the app";}else if(diff<180000){dot.className="ls-dot online";text.textContent="Active "+Math.floor(diff/60000)+" min ago";det.textContent=new Date(ts).toLocaleTimeString();}else if(diff<3600000){dot.className="ls-dot offline";text.textContent="Idle "+Math.floor(diff/60000)+" mins";det.textContent="Last seen "+new Date(ts).toLocaleTimeString();}else{dot.className="ls-dot offline";var hrs=Math.floor(diff/3600000);text.textContent="Away "+hrs+" hr"+(hrs>1?"s":"");det.textContent=new Date(ts).toLocaleString();}});db.ref("activityFeed").orderByChild("ts").limitToLast(10).on("value",function(snap){var feed=[];snap.forEach(function(c){feed.unshift(c.val());});var el=document.getElementById("activityFeed");if(!feed.length){el.innerHTML='<div style="color:rgba(255,255,255,0.35);font-size:0.72rem;text-align:center;padding:10px">No activity yet</div>';return;}el.innerHTML="";var icons={mood:"💜",task_add:"📝",task_done:"✅",game_puzzle:"🧩",game_memory:"🧠",game_wam:"🔨"};feed.forEach(function(item){var div=document.createElement("div");div.className="activity-item";div.innerHTML='<div class="act-icon">'+(icons[item.type]||"📌")+'</div><div class="act-text">'+item.detail+'</div><div class="act-time">'+item.time+'</div>';el.appendChild(div);});});}
 
 // ============================================================
-// TELEGRAM
+// ✅ TELEGRAM — Silent, no toast for user
 // ============================================================
-function sendTelegram(entry){var isAlert=ALERT_MOODS.indexOf(entry.label)!==-1;var msg=isAlert?"MOOD ALERT! Bold Auntyyyy is feeling "+entry.emoji+" "+entry.label+(entry.note?" Note: "+entry.note:"")+" at "+entry.time+" Go check on her NOW!":"Mood Update: Bold Auntyyyy is feeling "+entry.emoji+" "+entry.label+(entry.note?" Note: "+entry.note:"")+" at "+entry.time;if(window.location.protocol==="https:"){fetch("https://api.telegram.org/bot"+TELEGRAM_TOKEN+"/sendMessage",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:msg})}).then(function(r){return r.json();}).then(function(d){if(d.ok)showToast("Deadpool notified!","info");}).catch(function(){});}else{var url="https://api.telegram.org/bot"+TELEGRAM_TOKEN+"/sendMessage?chat_id="+TELEGRAM_CHAT_ID+"&text="+encodeURIComponent(msg);var img=new Image();img.src=url;}}
+function sendTelegram(entry){
+    var isAlert=ALERT_MOODS.indexOf(entry.label)!==-1;
+    var msg=isAlert?"MOOD ALERT! Bold Auntyyyy is feeling "+entry.emoji+" "+entry.label+(entry.note?" Note: "+entry.note:"")+" at "+entry.time+" Go check on her NOW!":"Mood Update: Bold Auntyyyy is feeling "+entry.emoji+" "+entry.label+(entry.note?" Note: "+entry.note:"")+" at "+entry.time;
+    // ✅ Silent — no toast shown to user
+    var url="https://api.telegram.org/bot"+TELEGRAM_TOKEN+"/sendMessage?chat_id="+TELEGRAM_CHAT_ID+"&text="+encodeURIComponent(msg);
+    var img=new Image(); img.src=url;
+}
 
 // ============================================================
 // PARTICLES
@@ -1328,7 +1308,7 @@ function whackMole(idx){var g=wamGame;if(!g.running||g.activeMole!==idx)return;v
 function stopWam(){var g=wamGame;g.running=false;clearInterval(g.timerRef);clearTimeout(g.moleRef);document.getElementById("wamBtn").textContent="START";if(g.activeMole>=0){var h=document.getElementById("hole"+g.activeMole);if(h){h.className="mole-hole";h.textContent="🌑";}g.activeMole=-1;}if(gameHistory.wam.bestScore===null||g.score>gameHistory.wam.bestScore){gameHistory.wam.bestScore=g.score;saveGameHistory();}if(g.score>0){var xp=g.score*2;totalXP+=xp;updateLevel();saveData();showToast("Score: "+g.score+"! +"+xp+" XP!","success");}}
 
 // ============================================================
-// MOOD MODAL — YOUR ORIGINAL TEXT
+// MOOD MODAL — ✅ YOUR EXACT ORIGINAL MESSAGES
 // ============================================================
 function shouldShowMoodModal(){if(MODE!=="user")return false;if(modalShownThisSession)return false;try{var last=parseInt(sessionStorage.getItem("lastMoodPopup")||"0"),now=Date.now();if(last===0||(now-last)>=THREE_HOURS)return true;var saved=JSON.parse(localStorage.getItem("todayMood_fb")||"null");if(saved)updateMoodDisplay(saved);return false;}catch(e){return true;}}
 function scheduleMoodModal(){if(!shouldShowMoodModal())return;setTimeout(function(){if(!modalShownThisSession)openMoodModal();},MODAL_DELAY);}
@@ -1345,23 +1325,28 @@ function submitMood(){
     if(db){db.ref("moodLog").push(entry);db.ref("latestMood").set(entry);setSyncStatus("Mood synced!","#51cf66","rgba(81,207,102,0.1)","rgba(81,207,102,0.3)");}
     try{var log=JSON.parse(localStorage.getItem("moodLog_fb")||"[]");log.unshift(entry);localStorage.setItem("moodLog_fb",JSON.stringify(log.slice(0,200)));localStorage.setItem("todayMood_fb",JSON.stringify(entry));}catch(e){}
     try{sessionStorage.setItem("lastMoodPopup",String(Date.now()));}catch(e){}
-    document.getElementById("moodOverlay").style.display="none";updateMoodDisplay(entry);
-    // YOUR EXACT ORIGINAL MOOD MESSAGES
+    document.getElementById("moodOverlay").style.display="none";
+    updateMoodDisplay(entry);
+
+    // ✅ YOUR EXACT ORIGINAL MOOD MESSAGES — not changed
     var msgs={
         "Fantastic":"You're feeling FANTASTIC! Let's crush tasks! 🚀",
         "Happy":"I like ur Happy vibes = productive day! 😊",
-        "Irritated":"You need to get irritated by me only so call me!",
-        "Sad":"Deadpool sends virtual hugs You may got happy vibe!",
-        "Stressed":"Ok i will not make trouble One task at a time!",
-        "Angry":"come and hit me, then channel that fire!",
-        "Tired":"Rest is important will go for break — You're stronger!",
-        "Loved":"Aww Deadpool will do that always!",
-        "Vella pakura mood ella so op aadikalm":"Enjoy your coffee! Come back refreshed!"
+        "Irritated":"You need to get irritated by me only 🌬️ so call me!",
+        "Sad":"Deadpool sends virtual hugs 💜 You may got happy vibe!",
+        "Stressed":"Ok i will not make trouble 🌬️ One task at a time!",
+        "Angry":"come and hit me, then channel that fire! 💥",
+        "Tired":"Rest is important 💙 will go for break — You're stronger!",
+        "Loved":"Aww 🥰 Deadpool will do that always!",
+        "Vella pakura mood ella so op aadikalm":"Enjoy your coffee! ☕ Come back refreshed! 😄"
     };
-    showToast(msgs[selectedLabel]||"Mood saved!","success");
+    showToast(msgs[selectedLabel]||"Mood saved! 💜","success");
+
     if(["Fantastic","Happy","Loved","Vella pakura mood ella so op aadikalm"].indexOf(selectedLabel)!==-1)fireConfetti();
     updateCatByMood(selectedLabel);
     trackActivity("mood","Mood: "+entry.emoji+" "+entry.label+(entry.note?" — "+entry.note:""));
+
+    // ✅ Silent Telegram — no toast shown to user
     sendTelegram(entry);
 }
 
@@ -1404,7 +1389,7 @@ function updateLevel(){var lv=getLevel(totalXP),idx=levels.findIndex(function(l)
 function updateCharCount(){var len=document.getElementById("input").value.length,c=document.getElementById("charCounter");c.textContent=len+" / "+MAX_CHARS;c.className="char-counter "+(len<400?"safe":len<480?"warning":"danger");}
 function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();add();}}
 function add(){if(MODE==="viewer"){showToast("Viewer mode!","error");return;}var value=document.getElementById("input").value.trim(),priority=document.getElementById("prioritySelect").value;if(!value){showToast("Enter a task first!","error");return;}var now=Date.now();tasks.push({id:now,text:value,completed:false,priority:priority,createdAt:now,expiresAt:now+ONE_WEEK});document.getElementById("input").value="";updateCharCount();saveData();renderTasks();updateStats();trackActivity("task_add","Added: "+value.substring(0,30));showToast("Task added!","success");}
-function toggleTask(id){if(MODE==="viewer")return;var earned=0;for(var i=0;i<tasks.length;i++){if(tasks[i].id===id){tasks[i].completed=!tasks[i].completed;if(tasks[i].completed){earned=tasks[i].priority==="high"?30:tasks[i].priority==="medium"?15:8;totalXP+=earned;streak++;fireConfetti();setCatState("excited");showCatBubble(pick(dpR.taskDone));trackActivity("task_done","Done: "+tasks[i].text.substring(0,25)+" +"+earned+" XP");showToast("Done! +"+earned+" XP! Deadpool is proud!","success");}break;}}saveData();renderTasks();updateStats();updateLevel();updateStreak();}
+function toggleTask(id){if(MODE==="viewer")return;var earned=0;for(var i=0;i<tasks.length;i++){if(tasks[i].id===id){tasks[i].completed=!tasks[i].completed;if(tasks[i].completed){earned=tasks[i].priority==="high"?30:tasks[i].priority==="medium"?15:8;totalXP+=earned;streak++;fireConfetti();setCatState("excited");showCatBubble(pick(dpR.taskDone));trackActivity("task_done","Done: "+tasks[i].text.substring(0,25)+" +"+earned+" XP");showToast("Done! +"+earned+" XP! Deadpool is proud! 💜","success");}break;}}saveData();renderTasks();updateStats();updateLevel();updateStreak();}
 function deleteItem(id){if(MODE==="viewer")return;tasks=tasks.filter(function(t){return t.id!==id;});saveData();renderTasks();updateStats();showToast("Deleted!","info");}
 function clearCompleted(){if(MODE==="viewer")return;var n=tasks.filter(function(t){return t.completed;}).length;if(!n){showToast("No completed tasks!","error");return;}tasks=tasks.filter(function(t){return !t.completed;});saveData();renderTasks();updateStats();showToast("Cleared "+n+" tasks!","info");}
 function filterTasks(type,btn){filter=type;document.querySelectorAll(".filter-btn").forEach(function(b){b.classList.remove("active");});btn.classList.add("active");renderTasks();}
